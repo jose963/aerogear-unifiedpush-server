@@ -129,6 +129,7 @@
             <value>3</value>
         </row>
     </table>
+    <table name="SA.WEB_INSTALLATION" />
     <table name="SA.CATEGORY"/>
     <table name="SA.INSTALLATION_CATEGORY"/>
     <table name="SA.FLAT_PUSH_MESSAGE_INFO" />
