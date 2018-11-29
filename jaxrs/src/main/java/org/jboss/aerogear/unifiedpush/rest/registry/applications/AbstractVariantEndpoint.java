@@ -160,5 +160,13 @@ public abstract class AbstractVariantEndpoint<T extends Variant> extends Abstrac
                 .map(variant -> (T) variant)
                 .collect(Collectors.toSet());
     }
+    
+    protected <T extends Variant> Set<T> getVariantsByType(PushApplication application, Class<T> type) {
+        Objects.requireNonNull(type, "type");
+        return application.getVariants().stream()
+                .filter(variant -> variant.getClass().equals(type))
+                .map(variant -> (T) variant)
+                .collect(Collectors.toSet());
+    }    
 
 }
