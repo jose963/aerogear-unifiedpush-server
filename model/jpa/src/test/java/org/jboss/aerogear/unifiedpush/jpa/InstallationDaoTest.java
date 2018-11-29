@@ -38,6 +38,7 @@ import org.jboss.aerogear.unifiedpush.api.AndroidVariant;
 import org.jboss.aerogear.unifiedpush.api.Category;
 import org.jboss.aerogear.unifiedpush.api.Installation;
 import org.jboss.aerogear.unifiedpush.api.Variant;
+import org.jboss.aerogear.unifiedpush.api.WebPushVariant;
 import org.jboss.aerogear.unifiedpush.api.WindowsWNSVariant;
 import org.jboss.aerogear.unifiedpush.api.iOSVariant;
 import org.jboss.aerogear.unifiedpush.dao.PageResult;
@@ -465,6 +466,34 @@ public class InstallationDaoTest {
         deviceTokenTest(installation, variant);
     }
 
+        
+    @Test(expected = ConstraintViolationException.class)
+    public void shouldNotSaveWhenWebPushTokenDoesNotUseHttps() {
+        // given
+        final Installation installation = new Installation();
+        installation.setDeviceToken("http://updates.push.services.mozilla.com/wpush/v1/gAAAAABXlQW2uvaJJk3Q6hey1cj2PjZYtGaDcY82DffVUF1OiV4Eu6SA1lds8jzKgZCR9JjIbioyv5jKwZQo2n6UxT8yRU3Es1qM2Fxmdv-p0cqGBhh4CjT5QNzlBAFRJ0OTLvisXB8e");
+        
+        final WebPushVariant variant = new WebPushVariant();
+        variant.setName("WebPush Variant Name");
+        
+        // when
+        deviceTokenTest(installation, variant);
+    }
+    
+    @Test
+    public void shouldSaveWhenWebPushTokenValid() {
+        // given
+        final Installation installation = new Installation();
+        installation.setDeviceToken("dMHRCBKHZIc:APA91bHx4B6wSTnyIkdxnBzcog_jewh2Gwx0pq_TXdXFpVYyMAp-b3bKiCfyeiuJ0iIkVi3ZjXhI2YIoGkqh6E_zPsqxklT59N2b3WpqGOmFzE2QkeMvPBb4OCLJj2ssxMOsF_-eED0xgTo-O69QLdNAUgiN44XkQQ");
+        
+        final WebPushVariant variant = new WebPushVariant();
+        variant.setName("WebPush Variant Name");
+        variant.setFcmServerKey("FCM Server Key");
+        
+        // when
+        deviceTokenTest(installation, variant);
+    }
+    
     private void deviceTokenTest(Installation installation, Variant variant) {
         entityManager.persist(variant);
         installation.setVariant(variant);
