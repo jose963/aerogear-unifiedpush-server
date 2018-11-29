@@ -23,6 +23,14 @@ CREATE TABLE ios_variant (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE webpush_variant (
+  fcm_server_key  VARCHAR(1000) NOT NULL,
+  fcm_sender_id VARCHAR(255),
+  custom_server_url BOOLEAN,
+  id         VARCHAR(255)  NOT NULL,
+  PRIMARY KEY (id)
+);
+
 CREATE TABLE simple_push_variant (
   id VARCHAR(255) NOT NULL,
   PRIMARY KEY (id)
@@ -51,6 +59,15 @@ CREATE TABLE installation (
   os_version       VARCHAR(255)  DEFAULT NULL,
   platform        VARCHAR(255)  DEFAULT NULL,
   variant_id       VARCHAR(255)  DEFAULT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE web_installation (
+  id                VARCHAR(255) NOT NULL,
+  installation_id   VARCHAR(255)  NOT NULL,
+  endpoint          VARCHAR(5120) NOT NULL,
+  subscription_key  VARCHAR(255)  NOT NULL,
+  subscription_auth VARCHAR(255)  NOT NULL,
   PRIMARY KEY (id)
 );
 
