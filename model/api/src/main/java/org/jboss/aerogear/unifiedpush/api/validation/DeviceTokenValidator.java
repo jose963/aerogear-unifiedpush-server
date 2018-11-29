@@ -43,6 +43,11 @@ public class DeviceTokenValidator implements ConstraintValidator<DeviceTokenChec
      * @see <a href="http://blogs.windows.com/windows_phone/b/wpdev/archive/2013/10/22/recommended-practices-for-using-microsoft-push-notification-service-mpns.aspx?Redirected=true">Windows developer blog</a>
      */
     private static final Pattern WINDOWS_DEVICE_TOKEN = Pattern.compile("https?://.{0,1024}");
+    /**
+     * Pattern for WebPush is harder to define that is why we kept it lenient it is at least 100 characters long and can
+     * consist of digits, alphas, - , _ and . and all have one of these separators
+     */
+    private static final Pattern WEB_PUSH_DEVICE_TOKEN = Pattern.compile("[0-9A-Za-z\\-_:]{100,}");
 
     @Override
     public void initialize(DeviceTokenCheck constraintAnnotation) {
@@ -75,6 +80,8 @@ public class DeviceTokenValidator implements ConstraintValidator<DeviceTokenChec
                 return ANDROID_DEVICE_TOKEN.matcher(deviceToken).matches();
             case WINDOWS_WNS:
                 return WINDOWS_DEVICE_TOKEN.matcher(deviceToken).matches();
+            case WEB_PUSH:
+                return WEB_PUSH_DEVICE_TOKEN.matcher(deviceToken).matches();
         }
         return false;
     }
