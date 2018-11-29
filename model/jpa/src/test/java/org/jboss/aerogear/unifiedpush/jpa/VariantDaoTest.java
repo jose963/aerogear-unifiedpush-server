@@ -197,6 +197,20 @@ public class VariantDaoTest {
     }    
     
     @Test
+    public void deleteVariantIncludingWebInstallations() {
+        WebPushVariant queriedVariant = (WebPushVariant) variantDao.findByVariantID("3");
+        assertThat(entityManager.find(Installation.class, "10")).isNotNull();
+        assertThat(entityManager.find(WebInstallation.class, "1")).isNotNull();
+         variantDao.delete(queriedVariant);
+        entityManager.flush();
+        entityManager.clear();
+        assertThat(variantDao.findByVariantID("3")).isNull();
+         // Installation should be gone...
+        assertThat(entityManager.find(WebInstallation.class, "1")).isNull();
+        assertThat(entityManager.find(Installation.class, "10")).isNull();       
+    }    
+    
+    @Test
     public void shouldDetectThatVariantIdNotExists() {
         //given
         String nonExistentVariantId = "321-variantId";
