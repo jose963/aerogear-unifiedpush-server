@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 package org.jboss.aerogear.unifiedpush.message.jms;
- import javax.annotation.Resource;
+import javax.annotation.Resource;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.jms.Queue;
- import org.jboss.aerogear.unifiedpush.api.VariantType;
+import org.jboss.aerogear.unifiedpush.api.VariantType;
 import org.jboss.aerogear.unifiedpush.message.holder.MessageHolderWithSubscriptions;
 import org.jboss.aerogear.unifiedpush.message.util.JmsClient;
 import org.slf4j.Logger;
@@ -30,14 +30,18 @@ import org.slf4j.LoggerFactory;
  * This bean serves as mediator for decoupling of JMS subsystem and services that triggers these messages.
  */
 public class MessageHolderWithSubscriptionsProducer extends AbstractJMSMessageProducer {
-     private static final Logger logger = LoggerFactory.getLogger(MessageHolderWithSubscriptionsProducer.class);
-     @Inject
+    private static final Logger logger = LoggerFactory.getLogger(MessageHolderWithSubscriptionsProducer.class);
+ 
+    @Inject
     private JmsClient jmsClient;
-     @Resource(mappedName = "java:/queue/APNsTokenBatchQueue")
+ 
+    @Resource(mappedName = "java:/queue/APNsTokenBatchQueue")
     private Queue apnsTokenBatchQueue;
-     @Resource(mappedName = "java:/queue/GCMTokenBatchQueue")
+ 
+    @Resource(mappedName = "java:/queue/GCMTokenBatchQueue")
     private Queue gcmTokenBatchQueue;
-     @Resource(mappedName = "java:/queue/WNSTokenBatchQueue")
+ 
+    @Resource(mappedName = "java:/queue/WNSTokenBatchQueue")
     private Queue wnsTokenBatchQueue;
     
     @Resource(mappedName = "java:/queue/WebPushTokenBatchQueue")
@@ -48,7 +52,8 @@ public class MessageHolderWithSubscriptionsProducer extends AbstractJMSMessagePr
         final String deduplicationId = String.format("%s-%s", msg.getPushMessageInformation().getId(), msg.getSerialId());
         jmsClient.send(msg).withDuplicateDetectionId(deduplicationId).to(selectQueue(variantType));
     }
-     private Queue selectQueue(VariantType variantType) {
+ 
+    private Queue selectQueue(VariantType variantType) {
         switch (variantType) {
             case ANDROID:
                 return gcmTokenBatchQueue;
