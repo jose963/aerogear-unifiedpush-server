@@ -45,6 +45,10 @@ public class MessageHolderWithVariantsProducer extends AbstractJMSMessageProduce
     @Resource(mappedName = "java:/queue/WNSPushMessageQueue")
     private Queue wnsPushMessageQueue;
 
+       
+    @Resource(mappedName = "java:/queue/WebPushMessageQueue")
+    private Queue webPushMessageQueue;
+    
     public void queueMessageVariantForProcessing(@Observes @DispatchToQueue MessageHolderWithVariants msg) {
         logger.trace("dispatching for processing variants and trigger token querying/batching");
         sendTransacted(selectQueue(msg.getVariantType()), msg);
@@ -58,6 +62,8 @@ public class MessageHolderWithVariantsProducer extends AbstractJMSMessageProduce
                 return apnsPushMessageQueue;
             case WINDOWS_WNS:
                 return wnsPushMessageQueue;
+            case WEB_PUSH:
+                return webPushMessageQueue;
             default:
                 throw new IllegalStateException("Unknown variant type queue");
         }
