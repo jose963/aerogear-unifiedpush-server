@@ -79,7 +79,8 @@ public class PushyApnsSender implements PushNotificationSender {
     private Event<iOSVariantUpdateEvent> variantUpdateEventEvent;
 
     @Override
-    public void sendPushMessage(final Variant variant, final Collection<String> tokens, final UnifiedPushMessage pushMessage, final String pushMessageInformationId, final NotificationSenderCallback senderCallback) {
+   public void sendPushMessage(final Variant variant, final Object clientIdentifiers, final UnifiedPushMessage pushMessage, final String pushMessageInformationId, final NotificationSenderCallback senderCallback) {
+        Collection<String> tokens = (Collection<String>) clientIdentifiers;
         // no need to send empty list
         if (tokens.isEmpty()) {
             return;
@@ -130,7 +131,7 @@ public class PushyApnsSender implements PushNotificationSender {
 
 
             tokens.forEach(token -> {
-                final SimpleApnsPushNotification pushNotification = new SimpleApnsPushNotification(token, defaultApnsTopic, payload);
+                final SimpleApnsPushNotification pushNotification = new SimpleApnsPushNotification(String.valueOf(token), defaultApnsTopic, payload);
                 final Future<PushNotificationResponse<SimpleApnsPushNotification>> notificationSendFuture = apnsClient.sendNotification(pushNotification);
 
                 notificationSendFuture.addListener(future -> {
