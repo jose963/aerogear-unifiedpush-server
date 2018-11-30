@@ -70,14 +70,15 @@ public class FCMPushNotificationSender implements PushNotificationSender {
      * the {@link List} of tokens for the given {@link AndroidVariant}.
      */
     @Override
-    public void sendPushMessage(Variant variant, Collection<String> tokens, UnifiedPushMessage pushMessage, String pushMessageInformationId, NotificationSenderCallback callback) {
-
+    public void sendPushMessage(Variant variant,  Object clientIdentifiers, UnifiedPushMessage pushMessage, String pushMessageInformationId, NotificationSenderCallback callback) {
+        Collection<String> tokens = (Collection<String>) clientIdentifiers; 
         // no need to send empty list
         if (tokens.isEmpty()) {
             return;
         }
 
-        final List<String> pushTargets = new ArrayList<>(tokens);
+        final List<String> pushTargets = new ArrayList<>(tokens.size());
+        tokens.stream().forEach(token -> pushTargets.add(String.valueOf(token)));        
         final AndroidVariant androidVariant = (AndroidVariant) variant;
 
         // payload builder:
